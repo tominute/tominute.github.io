@@ -30,7 +30,9 @@ jre-8u191-linux-x64.tar
 
 > unzip Matlab 2016b Linux64 Crack.zip
 > tar -zxvf jre-8u191-linux-x64.tar
+
 ### 1.3配置Java
+
 > vim ~/.bashrc
 
 然后在其中最后加入如下语句
@@ -45,7 +47,9 @@ jre-8u191-linux-x64.tar
 
 > source ~/.bashrc
 
+
 然后看看是否安装成功
+
 > java -version
 
 成功则会出现
@@ -53,8 +57,11 @@ jre-8u191-linux-x64.tar
 > java version "1.8.0_191"
 > Java(TM) SE Runtime Environment (build 1.8.0_191-b12)
 > Java HotSpot(TM) 64-Bit Server VM (build 25.191-b12, mixed mode)
+
 # 2.安装
+
 进入MatlabR2016b文件夹，先给一些文件授予权限
+
 > chmod 777 install
 > cd /your/path/Matlab_R2016b/sys/java/jre/glnxa64/jre/bin
 > chmod +x java
