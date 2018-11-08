@@ -1,6 +1,6 @@
 # Site settings
 title: Tominute Blog
-SEOTitle: Tominute的博客 | Hi Wangtong
+SEOTitle: Tominute的博客
 header-img: img/background.png
 email: tominute@163.com
 description: "Every failure is leading towards success."
@@ -19,7 +19,7 @@ sidebar-avatar: /img/hundun.jpg      # use absolute URL, seeing it's used in bot
 # SNS settings
 RSS: false
 # weibo_username:     qiubaiying
-zhihu_username:     tominute
+zhihu_username:     yu-bin-86
 github_username:    tominute
 
 
