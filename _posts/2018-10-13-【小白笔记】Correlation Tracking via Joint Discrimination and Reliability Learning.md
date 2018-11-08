@@ -1,0 +1,46 @@
+﻿---
+layout:     post
+title:      【小白笔记】Correlation Tracking via Joint Discrimination and Reliability Learning
+date:       2018-10-13
+author:     tominute
+header-img: img/post-bg-desk.jpg
+catalog: true
+tags:
+    - Tracking
+---
+
+这是CVPR18的一篇文章。[论文地址](http://openaccess.thecvf.com/content_cvpr_2018/papers/Sun_Correlation_Tracking_via_CVPR_2018_paper.pdf)，[项目地址](https://github.com/cswaynecool/DRT)。
+   该论文主要针对CF框架中可靠性信息学习的问题重新设计了模型，考虑了局部的跟踪响应的分布一致性，从而改善了跟踪结果被不可靠区域主导的问题，有不对的地方欢迎讨论~
+   
+# 1.主要贡献 
+该论文提出一个可以联合训练包含判别性和可靠性信息的跟踪模型，也是基于循环样本和FFT加速优化的框架。
+主要贡献有二，其一是提出了在原始目标函数中加入局部响应一致限制，目的是使的目标内的响应的差异减小；其二是提出了可靠性权重，用来描绘目标框内不同区域的重要性。同时原始滤波器和可靠性权重是在线联合学习的。
+![在这里插入图片描述](https://img-blog.csdn.net/20181013165102117?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+# 2.Motivation
+motivation有二，其一是一般的cf跟踪器没有尝试去压制目标框内的背景区域，其二是考虑到特征图的不一致的能量分布，这就导致跟踪器会在一些不重要的区域学习大量参数从而使跟踪结果被这些区域主导，所以需要在模型上去压制这些区域，也就是使各个区域的重要性趋于一致。如下图，传统的跟踪器会在背景区域学习到大量参数从而跟踪失败，而该方法能够学习去避免在该区域学习大量参数。
+![在这里插入图片描述](https://img-blog.csdn.net/20181013165124328?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+# 3.方法
+### 3.1 建模
+原始模型的目标方程如下![在这里插入图片描述](https://img-blog.csdn.net/20181013165136544?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+模型构建上主要把原始跟踪模板w拆成可靠性权重图和原始滤波器的点乘${\bf w}_d = {\bf h}_d\odot {\bf v}_d$，可靠性权重图设置在目标框内区域有值，其他区域值为零，这个权图又分为9个子区域的加权和，每个子权图只关注目标框内的一部分区域，只有此部分区域权值为1，即${\bf v}_d={\sum}_{m=1}^M \beta_m {\bf P}_d^m$，加权的权值设有上下限，保证跟踪器的稳定性。可以看到这个方法类似SRDCF的方法，不过这里更加直接的加权，且构成了一个新的跟踪模板，而非SRDCF仅用在正则项上。
+![在这里插入图片描述](https://img-blog.csdn.net/20181013165156497?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+   来看看新的目标函数如下：![在这里插入图片描述](https://img-blog.csdn.net/20181013165216968?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+   f1和原始的第一项没有区别，只是用新的模板w带入，而上式增加了一项局部响应一致项f2，即使不同子区域的响应差尽可能缩小，这也是用来防止加入$\beta$后学习到的差异过大，个人感觉这一项loss也能用在各个通道上。具体数学表达如下，作者使用了矢量化表达的方法使式子更简洁，文中的直积符号并非直积的含义。
+ ![在这里插入图片描述](https://img-blog.csdn.net/20181013165312724?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+
+
+![在这里插入图片描述](https://img-blog.csdn.net/20181013165321414?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+### 3.2 训练
+由于使用的都是循环样本，样本个数即size的大小K，所以可以使用FFT加速，训练模型的时候分别求解基础滤波器和子区域权值，再迭代至收敛，因为分别求解每一个子问题都是凸的。
+求解基础滤波器使用了共轭梯度下降（这里满足了CG条件，即A矩阵对称正定）的方法，对h求导令值为0,得等式如下
+
+
+
+![在这里插入图片描述](https://img-blog.csdn.net/20181013165423191?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+然后按照CG的方法套即可，这里使用了FFT方法加速求解CG中的计算大头项，都不难理解这里就不说了，注意只要是循环样本就可以变卷积为频域的点乘，共轭相乘相加。
+求解权值使用了二次优化工具直接求解，因为模型化简之后满足二次优化的形式。模型更新上使用了重要性衰减和高斯混合模型聚类的方法，和ECO一致，尺度检测使用了SAMF方法，使用的特征也包括传统和深度特征的结合。
+
+![在这里插入图片描述](https://img-blog.csdn.net/20181013165503438?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+# 4.实验结果
+实验结果上，在OTB13， OTB15和VOT16上都超过了ECO，特别是VOT达到 了44.2%超过ECO近7%，十分惊人，只是在速度上较慢，不会快于ECO，估计在1fps以下，作者进行的消融实验没有给我我想要的实验，即子区域的个数的影响，而且想知道是否不同通道设置的mask都不同且若不同如何设置，从代码来看基本套用了ECO的代码但是写的比较乱。
+![在这里插入图片描述](https://img-blog.csdn.net/20181013165555413?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
