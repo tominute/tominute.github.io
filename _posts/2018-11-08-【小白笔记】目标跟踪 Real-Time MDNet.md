@@ -9,10 +9,9 @@ tags:
     - Tracking
     - MDNet
 ---
-@[toc]
 这是ECCV18的一篇文章。[论文地址](http://openaccess.thecvf.com/content_ECCV_2018/papers/Ilchae_Jung_Real-Time_MDNet_ECCV_2018_paper.pdf)。
    该论文主要提出了一种改进的MDNet，通过引入Mask-RCNN的ROIAlign缩减网络大小从而达到实时的目的，有不对的地方欢迎讨论~
-   # 1.主要贡献 
+# 1.主要贡献 
 贡献一：利用ROIAlign的方法可以提取更加精确的位置的特征从而提高定位精度；
 贡献二：损失项中加入多任务损失使得模型能更有效判别不同域的视频的目标。
 # 2.知识准备
@@ -22,7 +21,7 @@ MDNet是一个纯深度的目标跟踪方法，训练时首先在每一个视频
 这是ROIpooling的改进版，在Mask-RCNN中提出，首先说ROIpooling是fast-RCNN中为了减少计算量使用的方法，根据提取多个ROI的特征然后pooling到固定的size，然后在输入到后续网络中，而ROIAlign是为了缓解ROIpooling的量化损失，通过双线性插值获得更加精确的位置的目标特征。
 # 3.改进
 ### 3.1 网络结构
-![图一](https://img-blog.csdnimg.cn/20181102153336293.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx,size_16,color_FFFFFF,t_70)
+![图一](https://img-blog.csdnimg.cn/20181102153336293.JPG)
 前面三层卷积层用于提取图像的特征，中间的ROIAlign作者进行了一些修改后面再说，用于提取各个ROI的特征，这个操作降低了特征维度同时保证了精度，后面又接了三个全连接层用于二分类。
 ### 3.2 自适应的ROIAlign
 由于卷积中间的pooling层会带来分辨率的损失，从而影响定位精度所以作者去掉了第二层卷积层后的pooling，直接进行第三层的空洞卷积，从而可以获得两倍于原始网络的特征大小。
