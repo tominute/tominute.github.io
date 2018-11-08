@@ -1,6 +1,6 @@
 ﻿---
 layout:     post
-title:      【小白笔记】目标跟踪Meta-Tracker_ Fast and Robust Online Adaptation for Visual Object Trackers
+title:      【小白笔记】目标跟踪Meta-Tracker: Fast and Robust Online Adaptation for Visual Object Trackers
 date:       2018-08-31
 author:     tominute
 header-img: img/post-bg-BJJ.jpg
