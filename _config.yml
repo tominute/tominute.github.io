@@ -3,7 +3,7 @@ title: Tominute Blog
 SEOTitle: Tominute的博客
 header-img: img/background.png
 email: tominute@163.com
-description: "Every failure is leading towards success."
+description: "研究僧写字的地方"
 keyword: "Tominute, tominute Blog"
 url: "http://tominute.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
@@ -11,17 +11,17 @@ github_repo: "https://github.com/tominute.github.io.git" # you code repository
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "软软真可爱"
+sidebar-about-description: "A student @NLPR, UCAS, Beijing"
 sidebar-avatar: /img/hundun.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
 # SNS settings
 RSS: false
-# weibo_username:     qiubaiying
+
 zhihu_username:     yu-bin-86
 github_username:    tominute
-
+facebook_username:  tominutebyu
 
 
 
@@ -53,14 +53,11 @@ kramdown:
 
 
 # 评论系统
-# Disqus（https://disqus.com/）
-# disqus_username: qiubaiying
-
 # Gitalk
 gitalk:
   enable: true    #是否开启Gitalk评论
-  clientID: f2c84e7629bb1446c1a4                            #生成的clientID
-  clientSecret: ca6d6139d1e1b8c43f8b2e19492ddcac8b322d0d    #生成的clientSecret
+  clientID: 9749506cca6e392823af                            #生成的clientID
+  clientSecret: e5c80d86fc35475e0e1e3331265aabbb3bc9a3c0    #生成的clientSecret
   repo: tominute.github.io    #仓库名称
   owner: tominute    #github用户名
   admin: tominute
@@ -71,7 +68,7 @@ gitalk:
 
 # Analytics settings
 # Baidu Analytics
-ba_track_id: b50bf2b12b5338a1845e33832976fd68
+#ba_track_id: b50bf2b12b5338a1845e33832976fd68
 
 # Google Analytics
 ga_track_id: 'UA-128955807-1'            # Format: UA-xxxxxx-xx
