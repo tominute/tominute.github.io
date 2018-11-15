@@ -3,7 +3,7 @@ layout:     post
 title:      【小白笔记】EAST_Learning Policies for Adaptive Tracking with Deep Feature Cascades
 date:       2018-09-16
 author:     tominute
-header-img: img/post-bg-coffee.jpg
+header-img: img/post-bg-BJJ.jpg
 catalog: true
 tags:
     - Tracking
