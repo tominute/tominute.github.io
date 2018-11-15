@@ -1,11 +1,20 @@
-﻿# 1.主要贡献
+﻿---
+layout:     post
+title:      【小白笔记】目标跟踪LSART(learning spatial_aware regressions for visual tracking)
+date:       2018-04-21
+author:     tominute
+header-img: img/post-bg-universe.jpg
+catalog: true
+tags:
+    - Tracking
+---
+# 1.主要贡献
 这篇文章发表于CVPR18上，是spotlight文章，从思路来说并不难，下面就来说一下这篇文章吧，有不对的地方欢迎一起讨论~ 
  
 <br />**贡献1**：这个算法使用了将KRR(核相关滤波)和CNN(卷积神经网络)方法结合的方式来进行目标跟踪(就是每个模型的response加权求和)，作者将传统迭代求解KRR的方法运用神经网络的方式求解(这个有意思)，比传统方式更有效；\\  
 <br />**贡献2**：将空域正则化的核用在卷积神经网络中，这样网络输出的每一层都可以对特定的局部区域有响应，并且作者使用了距离变化池化层(distance transform pooling layer)来卷积层输出的有效性。
 # 2.核化岭回归模型(KRR)
 ### 2.1 一个新的核
-
 首先给出岭回归模型原空间的解如下
 ![1](/img/20180421/1.jpg)
 然后给出对偶空间的解并运用核技巧如下
