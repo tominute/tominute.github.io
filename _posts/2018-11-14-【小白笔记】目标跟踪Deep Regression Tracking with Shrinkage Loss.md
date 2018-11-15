@@ -3,7 +3,7 @@ layout:     post
 title:      【小白笔记】目标跟踪Deep Regression Tracking with Shrinkage Loss
 date:       2018-11-14
 author:     tominute
-header-img: img/post-bg-BJJ.jpg
+header-img: img/home-bg-geek.jpg
 catalog: true
 tags:
     - Tracking

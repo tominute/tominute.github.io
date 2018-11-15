@@ -1,9 +1,9 @@
 ﻿---
 layout:     post
-title:      【小白笔记】Real-time ‘Actor-Critic’ Tracking
+title:      【小白笔记】目标跟踪Real-time ‘Actor-Critic’ Tracking
 date:       2018-10-19
 author:     tominute
-header-img: img/post-bg-debug.jpg
+header-img: img/home-bg-o.jpg
 catalog: true
 tags:
     - Tracking

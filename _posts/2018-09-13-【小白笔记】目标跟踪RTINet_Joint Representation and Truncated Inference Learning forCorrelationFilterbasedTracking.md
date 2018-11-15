@@ -1,6 +1,6 @@
 ﻿---
 layout:     post
-title:      【小白笔记】RTINet_Joint Representation and Truncated Inference Learning forCorrelationFilterbasedTracking
+title:      【小白笔记】目标跟踪RTINet_Joint Representation and Truncated Inference Learning forCorrelationFilterbasedTracking
 date:       2018-09-13
 author:     tominute
 header-img: img/post-bg-YesOrNo.jpg
@@ -8,39 +8,36 @@ catalog: true
 tags:
     - Tracking
 ---
-   这是ECCV18的一篇文章，悄悄更新一波国人的大作。[论文地址](http://openaccess.thecvf.com/content_ECCV_2018/papers/Yingjie_Yao_Joint_Representation_and_ECCV_2018_paper.pdf)
-   该论文主要是将BACF网络化，得到了top的性能，有不对的地方欢迎讨论~
 
-
-  
-# 1.主要贡献  
+这是ECCV18的一篇文章，悄悄更新一波国人的大作。👉[论文地址](http://openaccess.thecvf.com/content_ECCV_2018/papers/Yingjie_Yao_Joint_Representation_and_ECCV_2018_paper.pdf)该论文主要是将BACF网络化，得到了top的性能，有不对的地方欢迎讨论~ 
+# 1. 主要贡献  
 1.把BACF改造成了一个神经网络结构，可以进行端到端的训练；
 2.求解BACF的核心ADMM优化部分作者用网络的形式和截断推理的方法表示了出来，作者详细推导了梯度反传的部分；
 3.由于是CNN和BACF的结合，在性能上RTINet和ECO已经相当了。
 
 # 2. 基本方法
-### 2.1BACF
+### 2.1 BACF
 BACF是ICCV2017的文章，性能可以说是基于传统特征的最好的算法了，速度能达到35FPS，详情见我的一篇[博客](https://blog.csdn.net/sinat_27318881/article/details/79766138)，BACF的思路不难理解，代码也比较简单，难的是求解的过程。它的求解使用了ADMM方法迭代求解，同时使用了FFT的方法在频域加速计算。实际计算中迭代步骤只需要两步就可以达到不错的acurracy所以速度也不会太低。
 受到CFNet的motivation，将相关滤波整合到CNN中，可以进行离线训练，达到不错的性能，所以把BACF整合到CNN中也是很自然的想法。当我们固定迭代次数的时候，也就是截断推理的思想，又由于ADMM迭代的每个子问题是有闭式解的，所以把ADMM的求解过程展开是可以将其网络化的，最近网络化的文章很多，也是一个趋势。
 最后作者把特征提取网络和截断求解网络一起学习就构成了RTINet的整体结构了。
-### 2.2建模
+### 2.2 建模
 输入图像为x，定义z为x经过特征提取网络得到的CNN特征。考虑相关滤波模板ｆ的更新公式为$\bf{f}_{t+1} = \eta \bf{f^*} + (1-\eta)\bf{f}_t$，重写BACF的CNN形式优化问题如下
-![这里写图片描述](https://img-blog.csdn.net/20180913215111773?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+![1](/img/20180913/1.jpg)
 其中关键是$\bf{f^*}$是需要ADMM求解的，作者这里将ADMM求解过程展开，使用截断推理的思想，设迭代K次终止，这样每一步的$\bf{f^*}$和$\bf{f}_{t+1}$就可以用$\bf{f_t}$，$\bf{z_t}$和$\bf{y_t}$表示。每一次的截断迭代的参数$\lambda$，$\bf M$，$\eta$，$\rho$在每一步的迭代中可以进行学习和更新，也就是截断推理网络部分的参数。有一点疑问是$\bf M$在BACF中是提前计算的，这里的处理不太理解。
 这样重新将优化函数和ADMM迭代部分写出来如下：
-![这里写图片描述](https://img-blog.csdn.net/20180913215123650?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+![2](/img/20180913/2.jpg)
 根据上式，网络结构可以自然的画出来如下：
-![这里写图片描述](https://img-blog.csdn.net/20180913215133517?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+![3](/img/20180913/3.jpg)
 特征提取算一步，截断求解网络算第二步，初始的$\bf f$和$\bf g$为0.特征提取的部分使用了VGG-M的前三层卷积层，每层后加ReLu和LRN，pooling层仅加在前两层。式9和10的四个式子都是可导的，因此可以BP进行和特征提取网络一起的端到端训练。
-### 2.3模型学习
+### 2.3 模型学习
 从网络结构中可以看到每一步的迭代都算一个loss，所以作者详细推到了针对迭代网络中的每一步的参数和特征提取网络的参数的梯度计算，然后用在SGD算法中进行模型的学习与更新，有空仔细看看补充材料里的详细推导。在迭代网络的每一步都进行新一步的参数学习和之前参数的fine-tuning，直到进行到第K步终止。
-![这里写图片描述](https://img-blog.csdn.net/20180913215315343?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
-![这里写图片描述](https://img-blog.csdn.net/20180913215326817?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
-# 3.实验
+![4](/img/20180913/4.jpg)
+![5](/img/20180913/5.jpg)
+# 3. 实验
 训练数据使用了ILSVRC2015，每一个视频选择了目标大小合适的连续20帧进行训练，搜索域为方形的5倍目标大小，然后resize到224*224大小输入网络。
 训练时，使用贪婪的思想选择最合适的迭代网络的步数k，操作时固定特征提取网络参数训练迭代网络参数，训练第k步时前k-1步参数都固定且使用第k-1步参数初始化，每一步训练50次后合起来再训50次。
 具体结果很详细，进行了和CFNet的比较和消融d实验，比较关注的是BACF直接加CNN特征提升居然不大。实验上OTB15达到了68.2的AUC，速度为9fps，最佳的迭代网络步数是2，这和BACF中ADMM迭代次数一致。
-![这里写图片描述](https://img-blog.csdn.net/2018091321533785?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+![6](/img/20180913/6.jpg)
 有不对的地方欢迎讨论~
 
 
