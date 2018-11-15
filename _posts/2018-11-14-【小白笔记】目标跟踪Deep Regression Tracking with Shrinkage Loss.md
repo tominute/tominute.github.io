@@ -1,0 +1,49 @@
+---
+layout:     post
+title:      【小白笔记】目标跟踪Deep Regression Tracking with Shrinkage Loss
+date:       2018-11-14
+author:     tominute
+header-img: img/post-bg-coffee.jpg
+catalog: true
+tags:
+    - Tracking
+---
+
+这是ECCV18的一篇文章，使用了深度回归网络的框架，引入了收缩损失平衡正负样本量来提升回归网络的性能，文章思路总体比较简单，下面与大家分享，👉[论文地址](https://www.google.com.hk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=2ahUKEwiljPmdltXeAhUTTo8KHSPoATAQFjAAegQICBAC&url=http%3A%2F%2Fopenaccess.thecvf.com%2Fcontent_ECCV_2018%2Fpapers%2FXiankai_Lu_Deep_Regression_Tracking_ECCV_2018_paper.pdf&usg=AOvVaw0DlRC-39T_n5rS9-6ff4WY)👉[项目地址]( https://github.com/chaoma99/DSLT)，欢迎讨论~
+
+# 1 跟踪简述
+这一部分我觉得作者写的很不错，将跟踪分为了两阶段和单阶段的方法，和检测靠拢。
+### 1.1 两阶段
+第一阶段是提取样本阶段，有的直接在上一帧目标位置周围采，有的用RPN的方法；第二阶段就是给样本分类，分为目标或是背景，所以算法主要设计一个分类器，CNN或者SVM分类器，MDNet就是一个典型的两阶段算法，但是这类方法精度通常不高，因为跟踪是更重视定位精度的而不是是否分类正确，所以像ROI那样为检测提出的方法在跟踪上很难去提高定位精度。
+### 1.2 单阶段
+很简单算法输入是搜索域输出是响应图，类似YOLO那样一步到位，由于给的是整个搜索域所以通常是用卷积的方法，相当于样本是密集排布的，需要去学习一个滤波器来得到目标响应，这个响应通常是以训练目标为中心的二维高斯图Y。特别的，如果考虑到样本的特殊结构，比如循环样本，那么还可以用FFT的方法加速计算。像KCF，ECO都是传统的基于CF的单阶段方法，而本文则是基于深度回归网络的算法，十分简单粗暴，直接用CNN的方法学一个滤波器W，训练时候反传就用Loss对W求导计算误差，基本Loss就是X*W-Y，前向相当于搜索域patch通过一层卷积层就可以得到期望的回归目标。
+
+# 2 算法
+### 2.1 网络模型
+![图一](https://img-blog.csdnimg.cn/20181115105453220.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx,size_16,color_FFFFFF,t_70)
+左侧是VGG16特征提取网络，右边是回归部分，黑体的卷积层就是用W进行的卷积操作直接得到响应图，这里作者玩了一点花，用了残差网络的思想，将一些卷积层结构组合起来获得更鲁棒的结果，最后根据响应map得到目标位置。
+### 2.2 卷积回归
+就像上面说的一样，通过一层卷积层将输入的搜索域map（相当于密集采样的样本，样本和卷积核一样的size），输入去拟合一个二维高斯label，回归问题的目标函数如下，
+![图二](https://img-blog.csdnimg.cn/20181115105502145.JPG)
+由于搜索域patch通过CNN提取特征size都比较小，所以这里设定回归层卷积核size为5*5，就是式子中的W，如果传统方法是直接求出W的解析解，而CNN的方法就是反传了，设计的Loss和目标函数一样，用梯度下降法迭代求解。
+![图三](https://img-blog.csdnimg.cn/20181115105509870.JPG)
+
+### 2.3 收缩损失
+下面看看收缩损失（shrinkage loss）这个trick。作者认为之前深度回归网络效果上不去主要原因在训练的样本不均衡，就像检测里单阶段不如两阶段一样，因为正样本少负样本多，特别是easy负样本，就是很容易回归的样本，这也是CF+CNN方法的主要问题，这样计算loss大部分是被easy样本占领了所以学习的时候会忽视那些靠近目标的更有判别力的样本，看一下作者统计的一个图
+![图四](https://img-blog.csdnimg.cn/20181115105517833.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx,size_16,color_FFFFFF,t_70)
+P代表回归层输出，可以看到easy样本出现的频率太高了。为了解决这个问题，有人就抛弃了CF的方法，不密集采样了，有人给loss改了改，之前有人用过focal loss，这里作者用了收缩损失，这个和focal loss不太一样，后者加上调制系数之后，困难样本的loss的权值也会降低，但是收缩损失不会。
+那么怎么设计看一下下面这个图就知道了
+![图五](https://img-blog.csdnimg.cn/20181115105526594.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx,size_16,color_FFFFFF,t_70)
+左图的紫线是我们期望的加权系数，对loss大的部分可以保持不变，loss小的部分直接压缩，中间快速过度平滑在0.3到0.4之间，右图是加权后的loss比较，l2 loss就是原来的，可以看到收缩损失在大于0.4的部分没有变化，小于0.3的loss显著降低了，这就是期望的loss了，这个加权系数曲线也很容易获得，不就是sigmoid函数嘛，把L2 loss乘个sigmoid就得到了收缩损失函数
+![图六](https://img-blog.csdnimg.cn/20181115105535360.JPG)
+最后把收缩损失用到目标损失函数时，又修改了一下，用了代价敏感学习方法和期望label再次加权。
+### 2.4 残差结构设计
+残差组合的思想在作者的前作CREST中就已经用过，浅层可以用于定位，深层可以包含更多语义信息，有助于分类，作者结合了卷积第四层和第五层，放大一下回归网络部分如下，1*1的卷积核用于维度缩减，为了增大分辨率，conv5后还用了反卷积，之后和conv4层用残差连接的方法（应该是对应元素相加）组合起来 再输入回归卷积层输出最后的响应map，但是这个图和第一个全框图还有区别，第一个图还有将conv单独输入回归层和最后的响应map加起来。
+![图七](https://img-blog.csdnimg.cn/20181115105544189.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx,size_16,color_FFFFFF,t_70)
+
+### 2.5 跟踪框架
+说一下细节，尺度检测用的是3层尺度金字塔的方法，每一帧都会进行回归层的增量更新，利用前7帧进行更新。通道缩减从512减到128层，第一帧训练和后面更新的学习率也有差别。
+# 3 实验
+整理的性能除了ECO都能超过了，作者解释为ECO还用了其他手工特征的原因，速度不是优势，GPU每秒5.7帧，看一下有代表性的VOT16的结果，仅次于CCOT，这里MDNet的结果是不是有点问题，不会这么低吧。
+![图八](https://img-blog.csdnimg.cn/20181115105551153.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx,size_16,color_FFFFFF,t_70)
+另外从消融实验上看，去除残差连接的方法性能下降仅有0.1%，可见这个方法还是一般啊，但是可以让网络更好看，还是不错的。
