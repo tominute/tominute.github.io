@@ -4,7 +4,7 @@ layout:     post
 title:      【小白笔记】目标跟踪LSART(learning spatial-aware regressions for visual tracking)
 date:       2018-04-21
 author:     tominute
-header-img: img/post-bg-android.jpg
+header-img: img/post-bg-universe.jpg
 catalog: true
 tags:
     - Tracking

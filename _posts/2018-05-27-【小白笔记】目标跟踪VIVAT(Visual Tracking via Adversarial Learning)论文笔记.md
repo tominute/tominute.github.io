@@ -3,7 +3,7 @@ layout:     post
 title:      【小白笔记】目标跟踪VIVAT(Visual Tracking via Adversarial Learning)论文笔记
 date:       2018-05-27
 author:     tominute
-header-img: img/post-bg-debug.jpg
+header-img: img/post-bg-os-metro.jpg
 catalog: true
 tags:
     - Tracking

@@ -11,8 +11,8 @@ tags:
 
 这是ECCV18的一篇文章，悄悄更新一波国人的大作。👉[论文地址](http://openaccess.thecvf.com/content_ECCV_2018/papers/Yingjie_Yao_Joint_Representation_and_ECCV_2018_paper.pdf)该论文主要是将BACF网络化，得到了top的性能，有不对的地方欢迎讨论~ 
 # 1. 主要贡献  
-1.把BACF改造成了一个神经网络结构，可以进行端到端的训练；
-2.求解BACF的核心ADMM优化部分作者用网络的形式和截断推理的方法表示了出来，作者详细推导了梯度反传的部分；
+1.把BACF改造成了一个神经网络结构，可以进行端到端的训练；\\
+2.求解BACF的核心ADMM优化部分作者用网络的形式和截断推理的方法表示了出来，作者详细推导了梯度反传的部分；\\
 3.由于是CNN和BACF的结合，在性能上RTINet和ECO已经相当了。
 
 # 2. 基本方法
