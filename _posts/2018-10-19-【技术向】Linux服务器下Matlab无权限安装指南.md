@@ -1,13 +1,13 @@
 ﻿---
 layout:     post
 title:      【技术向】Linux服务器下Matlab无权限安装指南
-date:       2018-11-08
+date:       2018-10-19
 author:     tominute
 header-img: img/post-bg-ios9-web.jpg
 catalog: true
 tags:
     - Linux
-    - matlab
+    - Matlab
 ---
 
 我在网络上看了一些博客，觉得有的介绍有点多余且版本过老不适用，现根据我的经验分享一下安装流程。
@@ -74,17 +74,17 @@ jre-8u191-linux-x64.tar
 
 然后会看到弹出的图形界面，如果没有直接finish了那说明前面的有错，在install_unix文件中将最后第966行的eval "\$java_cmd 2> /dev/null"改为eval "\$java_cmd"，然后重新执行install程序可以看到输出的错误。
 进入图形界面后，选择使用密钥安装
-![图一](https://img-blog.csdn.net/20181019180151503?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
-![图二](https://img-blog.csdn.net/20181019180200353?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+![图一](/img/20181019/1.jpg)
+![图二](/img/20181019/2.jpg)
 然后在破解包Matlab 2016b Linux64 Crack文件夹中找到readme文件，复制其中第一个长的密钥，输入
-![图三](https://img-blog.csdn.net/20181019180211142?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+![图三](/img/20181019/3.jpg)
 然后选择安装位置
 
 
-![图四](https://img-blog.csdn.net/2018101918022468?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
-![图五](https://img-blog.csdn.net/20181019180406114?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+![图四](/img/20181019/4.jpg)
+![图五](/img/20181019/5.jpg)
 最后安装完成
-![图六](https://img-blog.csdn.net/20181019181007243?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+![图六](/img/20181019/6.jpg)
 然后将crack文件夹中的/R2016b/bin/glnxa64/文件夹下的文件全部拷贝到安装目录对应的地方，如果没有写入权限需要先给权限。
 
 > cd /home/your/install/path/R2016b/bin/
@@ -109,17 +109,17 @@ jre-8u191-linux-x64.tar
 
 > matlab
 
-![图八](https://img-blog.csdn.net/20181019182913927?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+![图七](/img/20181019/7.jpg)
 现在需要用破解包中的证书激活
-![图八](https://img-blog.csdn.net/20181019183258143?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+![图八](/img/20181019/8.jpg)
 然后就完成了~
-![图九](https://img-blog.csdn.net/20181019183308268?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+![图九](/img/20181019/9.jpg)
 最后检验一下成果，在你的任意目录输入matlab即可，也可以输入无图形界面模式命令如下
 
 > matlab -nodesktop -nosplash
 
 可以看到命令窗口如下显示
-![图十](https://img-blog.csdn.net/20181019183844210?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI3MzE4ODgx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+![图十](/img/20181019/10.jpg)
 证明安装成功了
 喜欢就点个赞吧~
 
