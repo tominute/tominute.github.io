@@ -1,14 +1,4 @@
-﻿---
-layout:     post
-title:      【小白笔记】目标跟踪LSART(learning spatial_aware regressions for visual tracking)
-date:       2018-04-21
-author:     tominute
-header-img: img/post-bg-universe.jpg
-catalog: true
-tags:
-    - Tracking
----
-# 1.主要贡献
+﻿# 1.主要贡献
 这篇文章发表于CVPR18上，是spotlight文章，从思路来说并不难，下面就来说一下这篇文章吧，有不对的地方欢迎一起讨论~ 
  
 <br />**贡献1**：这个算法使用了将KRR(核相关滤波)和CNN(卷积神经网络)方法结合的方式来进行目标跟踪(就是每个模型的response加权求和)，作者将传统迭代求解KRR的方法运用神经网络的方式求解(这个有意思)，比传统方式更有效；\\  
