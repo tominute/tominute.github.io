@@ -28,8 +28,8 @@ tags:
 ![图三](/img/20180331/3.jpg)
 
 我们来分析一下这个式子怎么来的，首先明确一个一维信号$\alpha$的离散傅里叶变换表示为$\hat{\alpha}=\sqrt{T}\bf{F\alpha}$,其中$\bf{F}$是T×T大小的正交傅里叶变换矩阵。把滤波模板h和矩阵P合起来看成一个新的滤波器$g_k=P^{\top}h_k$,用这个来代替（2）式中的h（正则项里的没有换，因为P不是正交的，这一点我有点疑惑是不是不太严谨），然后把通道数k去掉，写成更简洁的形式，那么y后面那一坨就变成${\bf{x}^j}^{\top}g$，其中g是KT×1大小的，$g=(P^{\top}\bigotimes I_k)h$,其中$h=[h_1^\top,h_2^\top,...,h_k^\top]^{\top}$这一步可能直积有人不理解，你把它展开就知道了，只要明确每个参数的维度就不会错了，
-${\bf{x}}^j=[{{\bf{x}}^j_1}^\top,{\bf{x}^j_2}^\top,...,{{\bf{x}}^j_k}^\top]^\top$,然后再去掉外面那个求和符号，把所有样本都写在一起，那么$y=[y(1),y(2),...,y(T)]^\top$,$\bf{X}=[{\bf{x}}^1,{\bf{x}}^2,...,{\bf{x}}^T]^\top$,前面那部分就变成了$y-{\bf{X}}g$,你看看维数是不是正确的，显然X是多通道的循环样本构成的矩阵，也可以写成$\bf{X}=[\bf{X}_1^\top,\bf{X}_2^\top,...,\bf{X}_k^\top]$，即每个通道的样本的循环矩阵的合并表示形式,每一个$\bf{X}_i^\top$的每一行表示一个样本，由循环样本的性质可以写成$\bf{X}_i^\top={\bf{F}}diag(\hat{x_i}){\bf{F}}^H ={\bf{F}}^{H}diag(\hat{x_i})^{\top}{\bf{F}}$最后一个等号存疑，那么对Xg进行傅里叶变换则为
-$\sqrt{T}\bf{F}[{\bf{F}}^{H}diag(\hat{x_1})^{\top}{\bf{F}},{\bf{F}}^{H}diag(\hat{x_2})^{\top}{\bf{F}},...,{\bf{F}}^{H}diag(\hat{x_k})^{\top}{\bf{F}}](P^{\top}\bigotimes I_k)h$
+$${\bf{x}}^j=[{{\bf{x}}^j_1}^\top,{\bf{x}^j_2}^\top,...,{{\bf{x}}^j_k}^\top]^\top$$,然后再去掉外面那个求和符号，把所有样本都写在一起，那么$y=[y(1),y(2),...,y(T)]^\top$,$\bf{X}=[{\bf{x}}^1,{\bf{x}}^2,...,{\bf{x}}^T]^\top$,前面那部分就变成了$y-{\bf{X}}g$,你看看维数是不是正确的，显然X是多通道的循环样本构成的矩阵，也可以写成$\bf{X}=[\bf{X}_1^\top,\bf{X}_2^\top,...,\bf{X}_k^\top]$，即每个通道的样本的循环矩阵的合并表示形式,每一个$\bf{X}_i^\top$的每一行表示一个样本，由循环样本的性质可以写成$\bf{X}_i^\top={\bf{F}}diag(\hat{x_i}){\bf{F}}^H ={\bf{F}}^{H}diag(\hat{x_i})^{\top}{\bf{F}}$最后一个等号存疑，那么对Xg进行傅里叶变换则为
+$$\sqrt{T}\bf{F}[{\bf{F}}^{H}diag(\hat{x_1})^{\top}{\bf{F}},{\bf{F}}^{H}diag(\hat{x_2})^{\top}{\bf{F}},...,{\bf{F}}^{H}diag(\hat{x_k})^{\top}{\bf{F}}](P^{\top}\bigotimes I_k)h$$
 
 $=[diag(\hat{x_1})^{\top},diag(\hat{x_2})^{\top},...,diag(\hat{x_k})^{\top}]\sqrt{T}({\bf{F}}P^{\top}\bigotimes I_k)h$，怎么样是不是得到了文中的表达式了。文中令$\hat{g}=\sqrt{T}({\bf{F}}P^{\top}\bigotimes I_k)h$即所得，并把这个看作一个约束。
 
