@@ -35,12 +35,7 @@ layout: default
                     </div>
                     <h1>{{ page.title }}</h1>
                     <p class="meta">{{ page.date | date: "%b %-d, %Y" }} <span class="pause"> - </span>
-                        Views：<span data-hk-page="current"> - </span><span class="pause"></span>
-                        {% if page.labels %}
-                            {% for label in page.labels %}
-                                <a class="label" href="{{ site.baseurl }}/all-articles/?label={{ label }}">{{ label }}</a>
-                            {% endfor %}
-                        {% endif %}
+                        <span id="busuanzi_container_site_pv">Views: <span id="busuanzi_value_site_pv"></span></span>
                     </p>
                     {% comment %}
                         always create a h2 for keeping the margin , Hux
