@@ -14,15 +14,15 @@ tags:
 # 1.安装前的准备
 理论上Linux64位系统各发布版都可以适用，引用块中为linux参考命令可以根据实际情况修改，需要安装JAVA是因为matlab的图形安装指导界面是java写的。
 ### 1.1原料下载：
-MATLAB R2016b Linux64安装包
-Matlab 2016b Linux64 Crack破解包
-JAVA Linux安装包(当前最新的java8 191版)
-所有原料可以在这边下载：
-R2016b_glnxa64_dvd1.iso
-R2016b_glnxa64_dvd2.iso
-Matlab 2016b Linux64 Crack.zip
-jre-8u191-linux-x64.tar
-[百度云下载地址](https://pan.baidu.com/s/1Z120_zLJzwMMRhzCZF_Vpw)
+MATLAB R2016b Linux64安装包\\
+Matlab 2016b Linux64 Crack破解包\\
+JAVA Linux安装包(当前最新的java8 191版)\\
+所有原料可以在这边下载：\\
+R2016b_glnxa64_dvd1.iso\\
+R2016b_glnxa64_dvd2.iso\\
+Matlab 2016b Linux64 Crack.zip\\
+jre-8u191-linux-x64.tar\\
+[百度云下载地址](https://pan.baidu.com/s/1Z120_zLJzwMMRhzCZF_Vpw)\\
 提取码：o4lz
 ### 1.2解压
 由于iso文件Linux无权限无法解压，需要直接在windows下解压好传到服务器端。
@@ -37,11 +37,11 @@ jre-8u191-linux-x64.tar
 
 然后在其中最后加入如下语句
 
-> export JAVA_HOME=/home/your/path/jre1.8.0_191
-> export JAVA_BIN=\$JAVA_HOME/bin
-> export JAVA_LIB=\$JAVA_HOME/lib
-> export CLASSPATH=.:\$JAVA_LIB  
-> export PATH=\$JAVA_BIN:\$PATH 
+> export JAVA_HOME=/home/your/path/jre1.8.0_191\\
+> export JAVA_BIN=\$JAVA_HOME/bin\\
+> export JAVA_LIB=\$JAVA_HOME/lib\\
+> export CLASSPATH=.:\$JAVA_LIB  \\
+> export PATH=\$JAVA_BIN:\$PATH \\
 
 然后保存退出刷新一下
 
@@ -54,18 +54,18 @@ jre-8u191-linux-x64.tar
 
 成功则会出现
 
-> java version "1.8.0_191"
-> Java(TM) SE Runtime Environment (build 1.8.0_191-b12)
+> java version "1.8.0_191"\\
+> Java(TM) SE Runtime Environment (build 1.8.0_191-b12)\\
 > Java HotSpot(TM) 64-Bit Server VM (build 25.191-b12, mixed mode)
 
 # 2.安装
 
 进入MatlabR2016b文件夹，先给一些文件授予权限
 
-> chmod 777 install
-> cd /your/path/Matlab_R2016b/sys/java/jre/glnxa64/jre/bin
-> chmod +x java
-> cd /your/path/Matlab_R2016b/bin/glnxa64/
+> chmod 777 install\\
+> cd /your/path/Matlab_R2016b/sys/java/jre/glnxa64/jre/bin\\
+> chmod +x java\\
+> cd /your/path/Matlab_R2016b/bin/glnxa64/\\
 > chmod 777 install_unix
 
 然后回到MatlabR2016b目录，主要不要在tmux或者screen中执行，然后直接输入
@@ -87,9 +87,9 @@ jre-8u191-linux-x64.tar
 ![图六](/img/20181019/6.jpg)
 然后将crack文件夹中的/R2016b/bin/glnxa64/文件夹下的文件全部拷贝到安装目录对应的地方，如果没有写入权限需要先给权限。
 
-> cd /home/your/install/path/R2016b/bin/
-> chmod -R 777 glnxa64/
-> cd /home/your/path/MatlabCrack/R2016b/bin/glnxa64/
+> cd /home/your/install/path/R2016b/bin/\\
+> chmod -R 777 glnxa64/\\
+> cd /home/your/path/MatlabCrack/R2016b/bin/glnxa64/\\
 >  mv * /home/your/install/path/R2016b/bin/glnxa64/
 
 然后设置一下环境变量
