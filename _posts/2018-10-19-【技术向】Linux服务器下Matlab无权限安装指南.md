@@ -41,7 +41,7 @@ jre-8u191-linux-x64.tar\\
 > export JAVA_BIN=\$JAVA_HOME/bin\\
 > export JAVA_LIB=\$JAVA_HOME/lib\\
 > export CLASSPATH=.:\$JAVA_LIB  \\
-> export PATH=\$JAVA_BIN:\$PATH \\
+> export PATH=\$JAVA_BIN:\$PATH 
 
 然后保存退出刷新一下
 
